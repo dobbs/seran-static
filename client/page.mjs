@@ -99,7 +99,7 @@ class Page extends HTMLElement {
 
         let flag = document.createElement("img")
         flag.classList.add("flag")
-        flag.setAttribute("src", new URL("favicon.png", window.location).toString())
+        flag.setAttribute("src", `${prefix}/favicon.png`)
 
         flagLink.appendChild(flag)
         span.appendChild(flagLink)
