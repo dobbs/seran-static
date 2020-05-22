@@ -173,10 +173,7 @@ resources([
             }
             if (document.URL.indexOf("?") == -1) {
                 console.log("loading default page")
-                if (!domain) {
-                    domain = "start.fed.wiki"
-                }
-                wiki.loadRemotePage(domain, "welcome-visitors")
+                wiki.loadRemotePage(typeof domain === "undefined" ? "start.fed.wiki" : domain, "welcome-visitors")
             }
             for (let [name, value] of new URL(document.URL).searchParams.entries()) {
                 if (name != "page") {
