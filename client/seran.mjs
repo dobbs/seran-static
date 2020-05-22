@@ -168,7 +168,7 @@ resources([
         async function loadPages() {
             if (document.URL.indexOf("?") == -1) {
                 console.log("loading default page")
-                wiki.loadPage("welcome-visitors")
+                wiki.loadRemotePage("wiki.randombits.xyz", "welcome-visitors")
             }
             for (let [name, value] of new URL(document.URL).searchParams.entries()) {
                 if (name != "page") {
