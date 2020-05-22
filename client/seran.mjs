@@ -93,7 +93,7 @@ function renderLinks(html, site) {
         let url = match.substring(0, match.indexOf(" "))
         try {
             new URL(url)
-        } catch(e) {
+        } catch (e) {
             return _full
         }
         let text = match.substring(match.indexOf(" "))
@@ -125,7 +125,7 @@ async function load(url) {
 
 async function resources(list) {
     let ret = Promise.resolve()
-    for(let script of list) {
+    for (let script of list) {
         ret = await load(new URL(script, import.meta.url).toString())
     }
     return ret
@@ -166,9 +166,17 @@ resources([
         }
         let wiki = document.querySelector("wiki-wiki")
         async function loadPages() {
+            let url = new URL(window.location)
+            if (url.hash.length > 0) {
+                window.location = `${new URL(window.location).origin}?page=${url.hash.slice(1)};welcome-visitors`
+                return
+            }
             if (document.URL.indexOf("?") == -1) {
                 console.log("loading default page")
-                wiki.loadRemotePage("wiki.randombits.xyz", "welcome-visitors")
+                if (!domain) {
+                    domain = "start.fed.wiki"
+                }
+                wiki.loadRemotePage(domain, "welcome-visitors")
             }
             for (let [name, value] of new URL(document.URL).searchParams.entries()) {
                 if (name != "page") {
