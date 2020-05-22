@@ -1,7 +1,7 @@
 let css = `
     body {
-        background: #eeeeee url("client/crosses.png");
-        overflow: hidden;
+        background: #eeeeee url("${new URL(import.meta.url, "crosses.png").toString()}");
+        overflow: hidden
         padding: 0;
         margin: 0;
         font-family: "Helvetica Neue", Verdana, helvetica, Arial, Sans;
@@ -19,7 +19,7 @@ let css = `
     footer {
         border-top: 1px solid #3d3c43;
         box-shadow: inset 0px 0px 7px rgba(0, 0, 0, 0.8);
-        background: #eeeeee url("client/noise.png");
+        background: #eeeeee url("${new URL(import.meta.url, "noise.png").toString()}");
         flex-basis: 20px;
         padding: 10px;
         font-size: 80%;
@@ -29,7 +29,7 @@ let css = `
     wiki-neighborhood:hover {
         border-top: 1px solid #3d3c43;
         box-shadow: inset 0px 0px 7px rgba(0, 0, 0, 0.8);
-        background: #eeeeee url("client/noise.png");
+        background: #eeeeee url("${new URL(import.meta.url, "noise.png").toString()}");
         flex-basis: 20px;
         padding: 10px;
         font-size: 80%;
