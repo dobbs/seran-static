@@ -1,6 +1,8 @@
 let css = `
     body {
-        background: #eeeeee url("${new URL("crosses.png", import.meta.url).toString()}");
+        background: #eeeeee url("${
+  new URL("crosses.png", import.meta.url).toString()
+}");
         overflow: hidden
         padding: 0;
         margin: 0;
@@ -19,7 +21,9 @@ let css = `
     footer {
         border-top: 1px solid #3d3c43;
         box-shadow: inset 0px 0px 7px rgba(0, 0, 0, 0.8);
-        background: #eeeeee url("${new URL("noise.png", import.meta.url).toString()}");
+        background: #eeeeee url("${
+  new URL("noise.png", import.meta.url).toString()
+}");
         flex-basis: 20px;
         padding: 10px;
         font-size: 80%;
@@ -29,7 +33,9 @@ let css = `
     wiki-neighborhood:hover {
         border-top: 1px solid #3d3c43;
         box-shadow: inset 0px 0px 7px rgba(0, 0, 0, 0.8);
-        background: #eeeeee url("${new URL("noise.png", import.meta.url).toString()}");
+        background: #eeeeee url("${
+  new URL("noise.png", import.meta.url).toString()
+}");
         flex-basis: 20px;
         padding: 10px;
         font-size: 80%;
@@ -70,128 +76,135 @@ let css = `
         box-shadow: 2px 1px 24px rgba(0, 0, 0, 0.4);
         z-index: 10;
     }
-`
+`;
 
-let style = document.createElement("style")
-style.innerHTML = css
-document.querySelector("head").appendChild(style)
+let style = document.createElement("style");
+style.innerHTML = css;
+document.querySelector("head").appendChild(style);
 
 function asSlug(name) {
-    return name.replace(/\s/g, '-').replace(/[^A-Za-z0-9-]/g, '').toLowerCase()
+  return name.replace(/\s/g, "-").replace(/[^A-Za-z0-9-]/g, "").toLowerCase();
 }
 
 function renderLinks(html, site) {
-    html = html.replace(/\[\[(.*?)\]\]/g, (_full, match) => {
-        if (site) {
-            // return `<a href='javascript:wiki.loadRemotePage("${site}", "${asSlug(match)}");wiki.updateURL()'>${match}</a>`
-            return `<wiki-link site="${site}" slug="${asSlug(match)}">${match}</wiki-link>`
-        }
-        // return `<a href='javascript:wiki.loadPage("${asSlug(match)}");wiki.updateURL()'>${match}</a>`
-        return `<wiki-link slug="${asSlug(match)}">${match}</wiki-link>`
-    })
-    return html.replace(/\[([^+]*)\]/g, (_full, match) => {
-        let url = match.substring(0, match.indexOf(" "))
-        try {
-            new URL(url)
-        } catch (e) {
-            return _full
-        }
-        let text = match.substring(match.indexOf(" "))
-        return `<wiki-link href='${url}' target="_blank">${text}</wiki-link>`
-    })
+  html = html.replace(/\[\[(.*?)\]\]/g, (_full, match) => {
+    if (site) {
+      // return `<a href='javascript:wiki.loadRemotePage("${site}", "${asSlug(match)}");wiki.updateURL()'>${match}</a>`
+      return `<wiki-link site="${site}" slug="${
+        asSlug(match)
+      }">${match}</wiki-link>`;
+    }
+    // return `<a href='javascript:wiki.loadPage("${asSlug(match)}");wiki.updateURL()'>${match}</a>`
+    return `<wiki-link slug="${asSlug(match)}">${match}</wiki-link>`;
+  });
+  return html.replace(/\[([^+]*)\]/g, (_full, match) => {
+    let url = match.substring(0, match.indexOf(" "));
+    try {
+      new URL(url);
+    } catch (e) {
+      return _full;
+    }
+    let text = match.substring(match.indexOf(" "));
+    return `<wiki-link href='${url}' target="_blank">${text}</wiki-link>`;
+  });
 }
-window.renderLinks = renderLinks
+window.renderLinks = renderLinks;
 
-window.plugins = {}
+window.plugins = {};
 function registerPlugin(name, cls) {
-    window.plugins[name] = cls
-    customElements.define(`wiki-${name}`, cls);
+  window.plugins[name] = cls;
+  customElements.define(`wiki-${name}`, cls);
 }
-window.registerPlugin = registerPlugin
+window.registerPlugin = registerPlugin;
 
 async function load(url) {
-    let script = document.createElement("script")
-    script.setAttribute("type", "module")
-    script.setAttribute("src", url)
-    // PromiseUtil.promisify
-    let promise = new Promise((res, rej) => {
-        script.onload = () => {
-            res()
-        }
-    })
-    document.querySelector("head").appendChild(script)
-    return promise
+  let script = document.createElement("script");
+  script.setAttribute("type", "module");
+  script.setAttribute("src", url);
+  // PromiseUtil.promisify
+  let promise = new Promise((res, rej) => {
+    script.onload = () => {
+      res();
+    };
+  });
+  document.querySelector("head").appendChild(script);
+  return promise;
 }
 
 async function resources(list) {
-    let ret = Promise.resolve()
-    for (let script of list) {
-        ret = await load(new URL(script, import.meta.url).toString())
-    }
-    return ret
+  let ret = Promise.resolve();
+  for (let script of list) {
+    ret = await load(new URL(script, import.meta.url).toString());
+  }
+  return ret;
 }
 
 resources([
-    //<!-- Plugins -->
-    "code.js",
-    "pagefold.js",
-    "paragraph.js",
-    "reference.js",
-    "roster.js",
+  //<!-- Plugins -->
+  "code.js",
+  "pagefold.js",
+  "paragraph.js",
+  "reference.js",
+  "roster.js",
 
-    //<!-- Wiki APIs / Custom Elements -->
-    "auth.js",
-    "neighborhood.js",
-    "link.js",
-    "twins.js",
-    "page.js",
-    "lineup.js",
-    "wiki.js"
+  //<!-- Wiki APIs / Custom Elements -->
+  "auth.js",
+  "neighborhood.js",
+  "link.js",
+  "twins.js",
+  "page.js",
+  "lineup.js",
+  "wiki.js",
 ]).then(() => {
-    let wiki = document.createElement("wiki-wiki")
-    let lineup = document.createElement("wiki-lineup")
-    let footer = document.createElement("footer")
-    let auth = document.createElement("wiki-auth")
-    let neighborhood = document.createElement("wiki-neighborhood")
+  let wiki = document.createElement("wiki-wiki");
+  let lineup = document.createElement("wiki-lineup");
+  let footer = document.createElement("footer");
+  let auth = document.createElement("wiki-auth");
+  let neighborhood = document.createElement("wiki-neighborhood");
 
-    wiki.appendChild(lineup)
-    wiki.appendChild(footer)
-    footer.appendChild(auth)
-    footer.appendChild(neighborhood)
+  wiki.appendChild(lineup);
+  wiki.appendChild(footer);
+  footer.appendChild(auth);
+  footer.appendChild(neighborhood);
 
-    document.querySelector("body").appendChild(wiki)
-    document.addEventListener("readystatechange", (e) => {
-        if (event.target.readyState != "complete") {
-            return
+  document.querySelector("body").appendChild(wiki);
+  document.addEventListener("readystatechange", (e) => {
+    if (event.target.readyState != "complete") {
+      return;
+    }
+    let wiki = document.querySelector("wiki-wiki");
+    async function loadPages() {
+      let url = new URL(window.location);
+      if (url.hash.length > 0) {
+        window.location = `${new URL(window.location).origin}?page=${
+          url.hash.slice(1)
+        };welcome-visitors`;
+        return;
+      }
+      if (document.URL.indexOf("?") == -1) {
+        console.log("loading default page");
+        wiki.loadRemotePage(
+          typeof domain === "undefined" ? "start.fed.wiki" : domain,
+          "welcome-visitors",
+        );
+      }
+      for (let [name, value] of new URL(document.URL).searchParams.entries()) {
+        if (name != "page") {
+          continue;
         }
-        let wiki = document.querySelector("wiki-wiki")
-        async function loadPages() {
-            let url = new URL(window.location)
-            if (url.hash.length > 0) {
-                window.location = `${new URL(window.location).origin}?page=${url.hash.slice(1)};welcome-visitors`
-                return
-            }
-            if (document.URL.indexOf("?") == -1) {
-                console.log("loading default page")
-                wiki.loadRemotePage(typeof domain === "undefined" ? "start.fed.wiki" : domain, "welcome-visitors")
-            }
-            for (let [name, value] of new URL(document.URL).searchParams.entries()) {
-                if (name != "page") {
-                    continue;
-                }
-                if (value.indexOf(";") != -1) {
-                    let [site, slug] = value.split(";")
-                    await wiki.loadRemotePage(site, slug)
-                    continue;
-                }
-                await wiki.loadPage(value)
-            }
+        if (value.indexOf(";") != -1) {
+          let [site, slug] = value.split(";");
+          await wiki.loadRemotePage(site, slug);
+          continue;
         }
-        loadPages()
-        window.onpopstate = (event) => {
-            console.log("pop!", event, window.location, window.URL);
-            [...wiki.lineup.pages].forEach((p) => p.remove())
-            loadPages()
-        }
-    })
-})
+        await wiki.loadPage(value);
+      }
+    }
+    loadPages();
+    window.onpopstate = (event) => {
+      console.log("pop!", event, window.location, window.URL);
+      [...wiki.lineup.pages].forEach((p) => p.remove());
+      loadPages();
+    };
+  });
+});

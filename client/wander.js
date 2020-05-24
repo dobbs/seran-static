@@ -2,7 +2,9 @@
 // Check with him for licensing restrictions
 
 function handleClick(dom, selector, fn) {
-  dom.querySelectorAll(selector).forEach(el => el.addEventListener('click', fn))
+  dom.querySelectorAll(selector).forEach((el) =>
+    el.addEventListener("click", fn)
+  );
 }
 
 export class TurtleWander extends HTMLElement {
@@ -65,7 +67,7 @@ var turtlespace = {
       movesize: 30,
       turnsize: Math.PI / 3,
       turnsize_numerator: 1,
-      turnsize_denominator: 6
+      turnsize_denominator: 6,
     },
     controls: {
       movesize: 30,
@@ -76,8 +78,8 @@ var turtlespace = {
       turnsize_denominator: 6,
       turnsize_denominator_options: [],
       pensize: 1,
-      pencolor: "black"
-    }
+      pencolor: "black",
+    },
   },
 
   history: {},
@@ -112,13 +114,13 @@ var turtlespace = {
       beforestate: {
         x: before.x,
         y: before.y,
-        direction: before.direction
+        direction: before.direction,
       },
       state: {
         x: that.x,
         y: that.y,
-        direction: that.direction
-      }
+        direction: that.direction,
+      },
     };
     turtlespace.history[before.name].unshift(moment);
     turtlespace.history[COMMAND_BUFFER].unshift(moment);
@@ -159,10 +161,15 @@ var turtlespace = {
 
   move: function move(that, pixels) {
     var p = parseFloat(pixels);
-    turtlespace.change(that, {
-      x: Math.cos(that.direction) * p + that.x,
-      y: Math.sin(that.direction) * p + that.y
-    }, turtlespace.move, [pixels]);
+    turtlespace.change(
+      that,
+      {
+        x: Math.cos(that.direction) * p + that.x,
+        y: Math.sin(that.direction) * p + that.y,
+      },
+      turtlespace.move,
+      [pixels],
+    );
     if (that.after_move && that.after_move.call) {
       that.after_move(that);
     }
@@ -170,9 +177,14 @@ var turtlespace = {
   },
 
   turn: function turn(that, radians) {
-    turtlespace.change(that, {
-      direction: that.direction + parseFloat(radians)
-    }, turtlespace.turn, [radians]);
+    turtlespace.change(
+      that,
+      {
+        direction: that.direction + parseFloat(radians),
+      },
+      turtlespace.turn,
+      [radians],
+    );
     return that;
   },
 
@@ -181,17 +193,16 @@ var turtlespace = {
     return that;
   },
 
-  setturnsize_numerator_denominator:
-    function setturnsize_numerator_denominator(
-      that,
-      numerator,
-      denominator
-    ) {
-      turtlespace.change_controls(that, {
-        turnsize_numerator: numerator || that.turnsize_numerator,
-        turnsize_denominator: denominator || that.turnsize_denominator
-      });
-    },
+  setturnsize_numerator_denominator: function setturnsize_numerator_denominator(
+    that,
+    numerator,
+    denominator,
+  ) {
+    turtlespace.change_controls(that, {
+      turnsize_numerator: numerator || that.turnsize_numerator,
+      turnsize_denominator: denominator || that.turnsize_denominator,
+    });
+  },
 
   turtle: function turtle(options) {
     if (!options) {
@@ -220,7 +231,7 @@ var turtlespace = {
       turn: function turn(radians) {
         turtlespace.saveAnd(turtlespace.turn, that, radians);
         return that;
-      }
+      },
     });
     return that;
   },
@@ -235,7 +246,7 @@ var turtlespace = {
     var that = Object.assign(
       {},
       turtlespace.named[options.name] || {},
-      options
+      options,
     );
     if (turtlespace.named[that.name] === undefined) {
       turtlespace.named[that.name] = Object.assign({}, that);
@@ -268,7 +279,7 @@ var turtlespace = {
           }
           turtlespace.setturnsize_numerator_denominator(
             that,
-            options[j] || options[0]
+            options[j] || options[0],
           );
           break;
         }
@@ -283,14 +294,14 @@ var turtlespace = {
           turtlespace.setturnsize_numerator_denominator(
             that,
             undefined,
-            options[j] || options[0]
+            options[j] || options[0],
           );
           if (that.turnsize_denominator < that.turnsize_numerator) {
             turtlespace.setturnsize_numerator_denominator(that, 1);
           }
           break;
         }
-      }
+      },
     });
     return that;
   },
@@ -300,7 +311,7 @@ var turtlespace = {
   },
 
   repeat_history: function repeat_history(that, name) {
-    history_iter(name, function(moment) {
+    history_iter(name, function (moment) {
       var args = [that].concat(moment.args);
       moment.fn.apply(undefined, args);
     });
@@ -316,7 +327,7 @@ var turtlespace = {
       } else {
         context.translate(
           turtlespace.named.origin.x,
-          turtlespace.named.origin.y
+          turtlespace.named.origin.y,
         );
         context.rotate(turtlespace.named.origin.direction);
       }
@@ -339,7 +350,7 @@ var turtlespace = {
           Ymin = Math.min(Math.ceil(that.y), Ymin);
           Xmax = Math.max(Math.floor(that.x), Xmax);
           Ymax = Math.max(Math.floor(that.y), Ymax);
-        }
+        },
       });
       turtlespace.repeat_history(visitor, turtle_name);
       return { Xmin: Xmin, Ymin: Ymin, Xmax: Xmax, Ymax: Ymax };
@@ -358,7 +369,7 @@ var turtlespace = {
       context.translate(
         -(boundaries["Xmin"] - padding / 2) +
           Math.max((height - width) / 2, 0),
-        -(boundaries["Ymin"] - padding / 2) + Math.max((width - height) / 2, 0)
+        -(boundaries["Ymin"] - padding / 2) + Math.max((width - height) / 2, 0),
       );
       context.beginPath();
       context.lineWidth = 1 / scale;
@@ -367,7 +378,7 @@ var turtlespace = {
         name: "turtle_icon_pen",
         after_move: function after_move(that) {
           context.lineTo(that.x, that.y);
-        }
+        },
       });
       turtlespace.repeat_history(pen, turtle_name);
       context.stroke();
@@ -388,7 +399,7 @@ var turtlespace = {
         name: "turtle_pen",
         after_move: function after_move(that) {
           context.lineTo(that.x, that.y);
-        }
+        },
       });
       turtlespace.repeat_history(pen, turtle_name);
       context.stroke();
@@ -405,7 +416,7 @@ var turtlespace = {
         radius,
         0,
         2 * Math.PI * controls.turnsize_numerator /
-          controls.turnsize_denominator
+          controls.turnsize_denominator,
       );
       context.fillStyle = "#777";
       context.fill();
@@ -420,7 +431,7 @@ var turtlespace = {
         context.moveTo(0, 0);
         context.lineTo(
           radius * Math.cos(i * 2 * Math.PI / controls.turnsize_denominator),
-          radius * Math.sin(i * 2 * Math.PI / controls.turnsize_denominator)
+          radius * Math.sin(i * 2 * Math.PI / controls.turnsize_denominator),
         );
       }
       context.strokeStyle = "#aaa";
@@ -446,27 +457,28 @@ var turtlespace = {
       var turtle = turtlespace.named.turtle;
       history.innerHTML = "";
       for (var turtle_name in turtlespace.history) {
-        if (turtlespace.named[turtle_name] &&
-          turtlespace.named[turtle_name].exclude_from_draw_histories)
-        {
+        if (
+          turtlespace.named[turtle_name] &&
+          turtlespace.named[turtle_name].exclude_from_draw_histories
+        ) {
           continue;
         }
         var moment = document.createElement("a");
         moment.setAttribute("href", "");
         moment.setAttribute("class", `turtle-play ${turtle_name}`);
         moment.setAttribute("data-turtle-name", turtle_name);
-        moment.innerHTML = '<canvas width="32" height="32"></canvas>'
+        moment.innerHTML = '<canvas width="32" height="32"></canvas>';
         var context = moment.querySelector("canvas").getContext("2d");
         drawTurtlePathIcon(context, turtle_name);
         history.appendChild(moment);
       }
-      handleClick(shadow, "a.turtle-play", event => {
+      handleClick(shadow, "a.turtle-play", (event) => {
         event.preventDefault();
-        let {turtleName} = event.target.parentElement.dataset
+        let { turtleName } = event.target.parentElement.dataset;
         turtlespace.saveAnd(
           turtlespace.repeat_history,
           turtlespace.named.turtle,
-          [turtleName, 0]
+          [turtleName, 0],
         );
         turtlespace.update_ui(shadow);
         return false;
@@ -480,7 +492,7 @@ var turtlespace = {
     }
 
     drawMove(
-      shadow.querySelector(".controls canvas.turtle-move").getContext("2d")
+      shadow.querySelector(".controls canvas.turtle-move").getContext("2d"),
     );
 
     var right = shadow.querySelector(".controls canvas.turtle-turn-right");
@@ -489,14 +501,18 @@ var turtlespace = {
     var left = shadow.querySelector(".controls canvas.turtle-turn-left");
     withTurnTransform(left.getContext("2d"), left.width, drawTurnsize, true);
 
-    var numerator = shadow.querySelector(".controls canvas.turtle-setturnsize-numerator");
+    var numerator = shadow.querySelector(
+      ".controls canvas.turtle-setturnsize-numerator",
+    );
     withTurnTransform(numerator.getContext("2d"), 8, drawTurnsizeNumerator);
 
-    var denominator = shadow.querySelector(".controls canvas.turtle-setturnsize-denominator");
+    var denominator = shadow.querySelector(
+      ".controls canvas.turtle-setturnsize-denominator",
+    );
     withTurnTransform(
       denominator.getContext("2d"),
       8,
-      drawTurnsizeDenominator
+      drawTurnsizeDenominator,
     );
 
     var playground = shadow.querySelector(".tracks .turtle");
@@ -513,18 +529,18 @@ var turtlespace = {
     textButton(
       turtlespace.named.controls.movesize,
       shadow.querySelector(".controls canvas.turtle-setmovesize").getContext(
-        "2d"
-      )
+        "2d",
+      ),
     );
     textButton(
       "clear",
-      shadow.querySelector(".controls canvas.turtle-clear").getContext("2d")
+      shadow.querySelector(".controls canvas.turtle-clear").getContext("2d"),
     );
     drawTurtlePathIcon(
       shadow.querySelector(".controls canvas.turtle-save-history").getContext(
-        "2d"
+        "2d",
       ),
-      "turtle"
+      "turtle",
     );
   },
 
@@ -535,8 +551,8 @@ var turtlespace = {
       turtlespace.named.origin,
       {
         name: COMMAND_BUFFER,
-        exclude_from_draw_histories: true
-      }
+        exclude_from_draw_histories: true,
+      },
     );
     turtlespace.named.turtle.exclude_from_draw_histories = true;
     turtlespace.history[COMMAND_BUFFER] = [];
@@ -556,7 +572,7 @@ var turtlespace = {
       13,
       14,
       15,
-      16
+      16,
     ];
     turtlespace.named.controls.turnsize_denominator_options = [
       2,
@@ -573,7 +589,7 @@ var turtlespace = {
       13,
       14,
       15,
-      16
+      16,
     ];
     turtlespace.named.controls.movesize_options = [
       5,
@@ -591,13 +607,13 @@ var turtlespace = {
       65,
       70,
       75,
-      80
+      80,
     ];
     var moveButtonVisitor = turtlespace.named.turtleMoveControl;
     if (!moveButtonVisitor) {
       moveButtonVisitor = turtlespace.turtle({
         name: "turtleMoveControl",
-        exclude_from_draw_histories: true
+        exclude_from_draw_histories: true,
       });
       var cbh = turtlespace.history[COMMAND_BUFFER];
       turtlespace.history[COMMAND_BUFFER] = [];
@@ -605,64 +621,72 @@ var turtlespace = {
       turtlespace.history[COMMAND_BUFFER] = cbh;
     }
     var controls = turtlespace.controls();
-    handleClick(shadow, ".controls .link-turtle-move", event => {
+    handleClick(shadow, ".controls .link-turtle-move", (event) => {
       event.preventDefault();
       turtle.move(controls.movesize);
       turtlespace.update_ui(shadow);
       return false;
     });
-    handleClick(shadow, ".controls .link-turtle-turn-left", event => {
+    handleClick(shadow, ".controls .link-turtle-turn-left", (event) => {
       event.preventDefault();
       turtle.turn(-controls.turnsize);
       turtlespace.update_ui(shadow);
       return false;
     });
-    handleClick(shadow, ".controls .link-turtle-turn-right", event => {
+    handleClick(shadow, ".controls .link-turtle-turn-right", (event) => {
       event.preventDefault();
       turtle.turn(controls.turnsize);
       turtlespace.update_ui(shadow);
       return false;
     });
-    handleClick(shadow, ".controls .link-turtle-setmovesize", event => {
+    handleClick(shadow, ".controls .link-turtle-setmovesize", (event) => {
       event.preventDefault();
       controls.next_movesize();
       turtlespace.update_ui(shadow);
       return false;
     });
-    handleClick(shadow, ".controls .link-turtle-setturnsize-numerator", event => {
-      event.preventDefault();
-      controls.next_turnsize_numerator();
-      turtlespace.update_ui(shadow);
-      return false;
-    });
-    handleClick(shadow, ".controls .link-turtle-setturnsize-denominator", event =>{
-      event.preventDefault();
-      controls.next_turnsize_denominator();
-      turtlespace.update_ui(shadow);
-      return false;
-    });
-    handleClick(shadow, ".controls .link-turtle-clear", event => {
+    handleClick(
+      shadow,
+      ".controls .link-turtle-setturnsize-numerator",
+      (event) => {
+        event.preventDefault();
+        controls.next_turnsize_numerator();
+        turtlespace.update_ui(shadow);
+        return false;
+      },
+    );
+    handleClick(
+      shadow,
+      ".controls .link-turtle-setturnsize-denominator",
+      (event) => {
+        event.preventDefault();
+        controls.next_turnsize_denominator();
+        turtlespace.update_ui(shadow);
+        return false;
+      },
+    );
+    handleClick(shadow, ".controls .link-turtle-clear", (event) => {
       event.preventDefault();
       var canvas = shadow.querySelector(".tracks .turtle");
       var context = canvas.getContext("2d");
       turtlespace.change(turtlespace.named.turtle, {
         x: turtlespace.named.origin.x,
         y: turtlespace.named.origin.y,
-        direction: turtlespace.named.origin.direction
+        direction: turtlespace.named.origin.direction,
       });
       turtlespace.history.turtle = [];
       turtlespace.history[COMMAND_BUFFER] = [];
       turtlespace.update_ui(shadow);
       return false;
     });
-    handleClick(shadow, ".controls .link-turtle-save-history", event => {
+    handleClick(shadow, ".controls .link-turtle-save-history", (event) => {
       event.preventDefault();
       var count = Object.keys(turtlespace.history).length;
       turtlespace.save_history({ name: COMMAND_BUFFER }, "turtle_" + count);
       turtlespace.update_ui(shadow);
       return false;
     });
-  }
+  },
 };
 
 var COMMAND_BUFFER = "command_buffer";
