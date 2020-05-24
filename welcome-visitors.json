@@ -1,0 +1,55 @@
+{
+  "title": "Welcome Visitors",
+  "story": [
+    {
+      "id": "id-hello-001",
+      "type": "paragraph",
+      "text": "Hello, World!"
+    },
+    {
+      "id": "id-002",
+      "type": "paragraph",
+      "text": "[[This Link]]"
+    },
+    {
+      "id": "id-hello-003",
+      "type": "pagefold",
+      "text": "json"
+    },
+    {
+      "id": "id-hello-002",
+      "type": "code",
+      "text": "{\n \"where\": \"Hello, World! code block\",\n \"what\": \"blob of json\"\n}\n"
+    }
+  ],
+  "journal": [
+    {
+      "action": "create",
+      "item":   {
+        "title": "Welcome Visitors",
+        "story": [
+          {
+            "id": "id-hello-001",
+            "type": "paragraph",
+            "text": "Hello, World!"
+          },
+          {
+            "id": "id-002",
+            "type": "paragraph",
+            "text": "[[This Link]]"
+          },
+          {
+            "id": "id-hello-003",
+            "type": "pagefold",
+            "text": "json"
+          },
+          {
+            "id": "id-hello-002",
+            "type": "code",
+            "text": "{\n \"where\": \"Hello, World! code block\",\n \"what\": \"blob of json\"\n}\n"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "This Link",
+  "story": [
+    {
+      "id": "id-hello-001",
+      "type": "paragraph",
+      "text": "Hello, World!"
+    }
+  ],
+  "journal": [
+    {
+      "date": "1590358324000",
+      "action": "create",
+      "item": {
+        "title": "This Link",
+        "story": [
+          {
+            "id": "id-hello-001",
+            "type": "paragraph",
+            "text": "Hello, World!"
+          }
+        ]
+      }
+    }
+  ]
+}
