@@ -1,27 +1,22 @@
+const template = document.createElement('template');
+template.innerHTML = `
+<style>
+:host {display: block;}
+pre {
+  background-color: #eee;
+  padding: 6px;
+  white-space: pre-wrap;
+}
+</style>
+<pre><slot></slot></pre>`;
 export class Code extends HTMLElement {
-  connectedCallback() {
-    if (this.inited) return;
-    this.inited = true;
-    let shadow = this.attachShadow({ mode: "open" });
-    let css = `
-            :host {
-                display: block;
-            }
-        `;
-    let style = document.createElement("style");
-    style.innerHTML = css;
-    shadow.appendChild(style);
-    this.pre = document.createElement("pre");
-    this.pre.light = this;
-    shadow.appendChild(this.pre);
-
-    let slot = document.createElement("slot");
-    this.pre.appendChild(slot);
+  constructor() {
+    super();
+    this.attachShadow({mode: "open"});
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
-
   set json(json) {
     this.textContent = json.text;
   }
 }
-
 registerPlugin("code", Code);
