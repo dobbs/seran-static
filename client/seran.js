@@ -133,20 +133,20 @@ async function resources(list) {
 
 resources([
     //<!-- Plugins -->
-    "code.mjs",
-    "pagefold.mjs",
-    "paragraph.mjs",
-    "reference.mjs",
-    "roster.mjs",
+    "code.js",
+    "pagefold.js",
+    "paragraph.js",
+    "reference.js",
+    "roster.js",
 
     //<!-- Wiki APIs / Custom Elements -->
-    "auth.mjs",
-    "neighborhood.mjs",
-    "link.mjs",
-    "twins.mjs",
-    "page.mjs",
-    "lineup.mjs",
-    "wiki.mjs"
+    "auth.js",
+    "neighborhood.js",
+    "link.js",
+    "twins.js",
+    "page.js",
+    "lineup.js",
+    "wiki.js"
 ]).then(() => {
     let wiki = document.createElement("wiki-wiki")
     let lineup = document.createElement("wiki-lineup")
