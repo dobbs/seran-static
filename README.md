@@ -1,18 +1,16 @@
 # Static variant of Seran Wiki Outpost
 
-Get source code & install deno*
+Get source code
 
     git clone git@github.com:joshuabenuck/seran-static.git
-    curl -fsSL https://deno.land/x/install/install.sh | sh
 
-*Any simple web server will do. We suggest the deno incantation
-below because we are using deno for other experiments.
+Any simple web server will do. Here's an example with a docker hosted
+caddy server:
 
     cd seran-static
-    deno run \
-      --allow-net \
-      --allow-read=$PWD \
-      https://deno.land/std/http/file_server.ts
+    docker run -d --name seran-reader \
+      --rm -p2015:2015 -v"$PWD:/it" -w /it \
+      dobbs/proxy caddy browse
 
 # Choose a different starting page
 
