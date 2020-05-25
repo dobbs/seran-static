@@ -69,15 +69,20 @@ class Wiki extends HTMLElement {
     }
     if (!this.pluginsLoadedFor.has(origin)) {
       this.pluginsLoadedFor.add(origin);
-      try {
-        let content = await fetch(`${origin}/system/plugins.json`);
+      let content = await fetch(`${origin}/system/plugins.json`);
+      if (content.status >= 400) {
+        console.log(`GET ${origin}/system/plugins.json: ${content.status} ${content.statusText}`);
+      } else {
         let plugins = await content.json();
+        console.log(`${origin}: loading plugins`);
         for (let plugin of plugins) {
-          console.log("Loading plugin:", plugin);
-          let module = await import(plugin);
+          try {
+            console.log("  ", plugin);
+            await import(plugin);
+          } catch (e) {
+            console.log("  failed:", origin, e);
+          }
         }
-      } catch (e) {
-        console.log("Unable to load plugins for:", origin, e);
       }
     }
   }

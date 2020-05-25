@@ -57,8 +57,12 @@ class Neighboorhood extends HTMLElement {
     // site map is empty until loaded
     this.siteMaps[site] = [];
     let resp = await fetch(`http://${site}/system/sitemap.json`);
-    let json = await resp.json();
-    this.siteMaps[site] = json;
+    if (resp.status >= 400) {
+      console.log(`GET ${site}/system/sitemap.json: ${resp.status} ${resp.statusText}`);
+    } else {
+      let json = await resp.json();
+      this.siteMaps[site] = json;
+    }
   }
 
   has(site) {
