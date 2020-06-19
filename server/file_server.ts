@@ -6,10 +6,10 @@
 // TODO Add tests like these:
 // https://github.com/indexzero/http-server/blob/master/test/http-server-test.js
 
-import { posix, extname } from "../path/mod.ts";
-import { listenAndServe, ServerRequest, Response } from "./server.ts";
-import { parse } from "../flags/mod.ts";
-import { assert } from "../_util/assert.ts";
+import { posix, extname } from "https://deno.land/std/http/../path/mod.ts";
+import { listenAndServe, ServerRequest, Response } from "https://deno.land/std/http/./server.ts";
+import { parse } from "https://deno.land/std/http/../flags/mod.ts";
+import { assert } from "https://deno.land/std/http/../_util/assert.ts";
 
 interface EntryInfo {
   mode: string;

@@ -4,13 +4,19 @@ Get source code
 
     git clone git@github.com:joshuabenuck/seran-static.git
 
-Any simple web server will do. Here's an example with a docker hosted
-caddy server:
+Any simple web server will do. First using `file_server.ts` from the
+deno standard library:
 
     cd seran-static
-    docker run -d --name seran-reader \
-      --rm -p2015:2015 -v"$PWD:/it" -w /it \
-      dobbs/proxy caddy browse
+    deno run --allow-net --allow-read https://deno.land/std/http/file_server.ts
+
+Second our local, slightly modified copy:
+
+    ./server/file_server.ts
+
+Visit either of the above:
+
+    http://localhost:4507
 
 # Choose a different starting page
 
