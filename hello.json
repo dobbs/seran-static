@@ -1,0 +1,9 @@
+console.log(JSON.stringify({
+  title: "Hello, World!",
+  story: [
+    {
+      type: "paragraph",
+      text: "welcome"
+    }
+  ]
+}));

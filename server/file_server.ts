@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-run
 // Copyright 2018-2020 the Deno authors. All rights reserved. MIT license.
 
 // This program serves files in the current directory over HTTP.
@@ -93,6 +93,26 @@ function fileLenToString(len: number): string {
   }
 
   return `${(len / base).toFixed(2)}${suffix[suffixIndex]}`;
+}
+
+import { exec, OutputMode } from "https://deno.land/x/exec/mod.ts";
+export async function execFile(
+  req: ServerRequest,
+  filePath: string
+): Promise<Response> {
+  const headers = new Headers();
+  const contentTypeValue = contentType(filePath);
+  if (contentTypeValue) {
+    headers.set("content-type", contentTypeValue);
+  }
+  const {output} = (await exec(`env -S deno run ${filePath}`,
+                               {output: OutputMode.Capture}));
+  headers.set("content-length", output.length.toString());
+  return {
+    status: 200,
+    body: output,
+    headers,
+  };
 }
 
 export async function serveFile(
@@ -339,8 +359,11 @@ function main(): void {
       let response: Response | undefined;
       try {
         const fileInfo = await Deno.stat(fsPath);
+        const isExecutable = ((fileInfo.mode||0) & 0o111) > 0;
         if (fileInfo.isDirectory) {
           response = await serveDir(req, fsPath);
+        } else if (isExecutable) {
+          response = await execFile(req, fsPath);
         } else {
           response = await serveFile(req, fsPath);
         }
