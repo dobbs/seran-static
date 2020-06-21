@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read --allow-run
+#!/usr/bin/env -S deno run --allow-net --allow-read=. --allow-run=.
 // Copyright 2018-2020 the Deno authors. All rights reserved. MIT license.
 
 // This program serves files in the current directory over HTTP.
@@ -105,8 +105,7 @@ export async function execFile(
   if (contentTypeValue) {
     headers.set("content-type", contentTypeValue);
   }
-  const {output} = (await exec(`env -S deno run ${filePath}`,
-                               {output: OutputMode.Capture}));
+  const {output} = await exec(filePath, {output: OutputMode.Capture});
   headers.set("content-length", output.length.toString());
   return {
     status: 200,

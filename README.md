@@ -12,7 +12,7 @@ deno standard library:
 
 Second our local, slightly modified copy:
 
-    ./server/file_server.ts
+    ./assets/deno/file_server.ts
 
 Visit either of the above:
 

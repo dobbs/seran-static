@@ -1,9 +1,8 @@
-console.log(JSON.stringify({
-  title: "Hello, World!",
-  story: [
-    {
-      type: "paragraph",
-      text: "welcome"
-    }
-  ]
-}));
+#!/usr/bin/env -S deno run
+import {page} from "./assets/seran/mod.ts";
+console.log(JSON.stringify(page("Hello There!", [
+  {
+    type: "paragraph",
+    text: "welcome"
+  }
+])));
