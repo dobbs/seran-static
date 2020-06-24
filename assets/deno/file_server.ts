@@ -98,14 +98,16 @@ function fileLenToString(len: number): string {
 import { exec, OutputMode } from "https://deno.land/x/exec/mod.ts";
 export async function execFile(
   req: ServerRequest,
-  filePath: string
+  filePath: string,
+  url: URL
 ): Promise<Response> {
   const headers = new Headers();
   const contentTypeValue = contentType(filePath);
   if (contentTypeValue) {
     headers.set("content-type", contentTypeValue);
   }
-  const {output} = await exec(filePath, {output: OutputMode.Capture});
+  const cmd = `bash -c "QUERY_STRING=${url.search.substr(1)} ${filePath}"`;
+  const {output} = await exec(cmd, {output: OutputMode.Capture});
   headers.set("content-length", output.length.toString());
   return {
     status: 200,
@@ -321,6 +323,20 @@ function html(strings: TemplateStringsArray, ...values: unknown[]): string {
   return html;
 }
 
+function urlFromRequest(req: ServerRequest): URL {
+  let normalizedUrl = posix.normalize(req.url);
+  try {
+    normalizedUrl = decodeURIComponent(normalizedUrl);
+  } catch (e) {
+    if (!(e instanceof URIError)) {
+      throw e;
+    }
+  }
+  // treat missing host header as a file URL
+  const base = req.headers.get("host") ?? "file:";
+  return new URL(normalizedUrl, base);
+}
+
 function main(): void {
   const CORSEnabled = serverArgs.cors ? true : false;
   const addr = `0.0.0.0:${serverArgs.port ?? serverArgs.p ?? 4507}`;
@@ -345,15 +361,8 @@ function main(): void {
   listenAndServe(
     addr,
     async (req): Promise<void> => {
-      let normalizedUrl = posix.normalize(req.url);
-      try {
-        normalizedUrl = decodeURIComponent(normalizedUrl);
-      } catch (e) {
-        if (!(e instanceof URIError)) {
-          throw e;
-        }
-      }
-      const fsPath = posix.join(target, normalizedUrl);
+      const url = urlFromRequest(req);
+      const fsPath = posix.join(target, url.pathname);
 
       let response: Response | undefined;
       try {
@@ -362,7 +371,7 @@ function main(): void {
         if (fileInfo.isDirectory) {
           response = await serveDir(req, fsPath);
         } else if (isExecutable) {
-          response = await execFile(req, fsPath);
+          response = await execFile(req, fsPath, url);
         } else {
           response = await serveFile(req, fsPath);
         }
